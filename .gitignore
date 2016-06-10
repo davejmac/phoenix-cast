@@ -8,3 +8,9 @@ ebin
 rel/example_project
 .concrete/DEV_MODE
 .rebar
+mix.lock
+*.ez
+ebin
+_build
+deps
+ebin
