@@ -14,3 +14,4 @@ ebin
 _build
 deps
 ebin
+node_modules
