@@ -1,45 +1,43 @@
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var CopyWebpackPlugin = require("copy-webpack-plugin");
+var path = require('path')
+var webpack = require('webpack')
+var publicPath = 'http://localhost:4001/'
+
+var env = process.env.MIX_ENV || 'dev'
+var prod = env === 'prod'
+
+var entry = './web/static/js/index.js'
+var hot = 'webpack-hot-middleware/client?path=' +
+  publicPath + '__webpack_hmr'
+
+var plugins = [
+  new webpack.optimize.OccurrenceOrderPlugin(),
+  new webpack.NoErrorsPlugin(),
+  new webpack.DefinePlugin({
+    __PROD: prod,
+    __DEV: env === 'dev'
+  })
+]
+
+if (env === 'dev') {
+  plugins.push(new webpack.HotModuleReplacementPlugin())
+}
 
 module.exports = {
-  devtool: "source-map",
-  entry: {
-    "app": ["./web/static/css/app.scss", "./web/static/js/app.js"],
-  },
-
+  devtool: prod ? null : 'cheap-module-eval-source-map',
+  entry: prod ? entry : [hot, entry],
   output: {
-    path: "./priv/static",
-    filename: "js/app.js"
+    path: path.resolve(__dirname) + '/priv/static/js',
+    filename: 'index.bundle.js',
+    publicPath: publicPath
   },
-
-  resolve: {
-    modulesDirectories: [ "node_modules", __dirname + "/web/static/js" ]
-  },
-
+  plugins: plugins,
   module: {
     loaders: [
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: "babel",
-        query: {
-          presets: ['es2015']
-        }
-      }, {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract("style", "css")
-      }, {
-        test: /\.scss$/,
-        loader: ExtractTextPlugin.extract(
-          "style",
-          "css!sass?includePaths[]=" + __dirname +  "/node_modules"
-        )
+        test: /\.jsx?$/,
+        loaders: ['babel'],
+        exclude: path.resolve(__dirname, 'node_modules')
       }
     ]
-  },
-
-  plugins: [
-    new ExtractTextPlugin("css/app.css"),
-    new CopyWebpackPlugin([{ from: "./web/static/assets" }])
-  ]
+  }
 }

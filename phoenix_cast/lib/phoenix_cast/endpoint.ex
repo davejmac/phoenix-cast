@@ -33,7 +33,7 @@ defmodule PhoenixCast.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_phoenix_cast_key",
-    signing_salt: "T4E4gELI"
+    signing_salt: "e2DdQHbm"
 
   plug PhoenixCast.Router
 end

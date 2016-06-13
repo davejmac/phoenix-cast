@@ -9,7 +9,7 @@ defmodule PhoenixCast.Mixfile do
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     aliases: aliases,
+     aliases: ["phoenix.digest": "phoenix_cast.digest"],
      deps: deps]
   end
 
